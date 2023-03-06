@@ -18,19 +18,14 @@ public sealed class ConnectController : Controller
     }
 
     [HttpPost("~/connect/token")]
+    [HttpGet("~/connect/token")]
     public async Task<IActionResult> Exchange()
     {
         var request = HttpContext.GetOpenIddictServerRequest()!;
-        if (!request.IsClientCredentialsGrantType())
-        {
-            throw new NotImplementedException("Grant Type не реализован");
-        }
+        if (!request.IsClientCredentialsGrantType()) throw new NotImplementedException("Grant Type не реализован");
 
         var application = await _manager.FindByClientIdAsync(request.ClientId);
-        if (application is null)
-        {
-            throw new InvalidOperationException("Client не зарегистирован");
-        }
+        if (application is null) throw new InvalidOperationException("Client не зарегистирован");
 
         var identity = new ClaimsIdentity(
             TokenValidationParameters.DefaultAuthenticationType,

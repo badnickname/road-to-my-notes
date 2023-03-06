@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyNotes.Identity;
 using NLog.Web;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseNLog();
@@ -13,11 +14,19 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseOpenIddict();
 });
 builder.Services.AddControllers();
+builder.Services.AddQuartz(options =>
+{
+    options.UseMicrosoftDependencyInjectionJobFactory();
+    options.UseSimpleTypeLoader();
+    options.UseInMemoryStore();
+});
+builder.Services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 builder.Services.AddOpenIddict()
     .AddCore(options =>
     {
         options.UseEntityFrameworkCore()
             .UseDbContext<ApplicationContext>();
+        options.UseQuartz();
     })
     .AddServer(options =>
     {

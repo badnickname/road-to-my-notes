@@ -1,0 +1,21 @@
+version: '3.4'
+
+services: 
+  identity_server:
+    image: identity_server
+    build:
+      dockerfile: ../Dockerfile
+      context: MyNotes.Identity
+    ports:
+      - 5001:5001
+  
+  proxy:
+    image: nginx:alpine
+    links:
+      - identity_server
+    volumes:
+      - ./.nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./.nginx/cert.key:/etc/nginx/cert.key
+      - ./.nginx/cert.crt:/etc/nginx/cert.crt
+    ports:
+      - 5010:5010

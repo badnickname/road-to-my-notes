@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "Сервис менеджмента тренировок",
   "scripts": {
-    "identity_server-build": "echo \"Error: no test specified\" && exit 1",
-	"identity_server-run": "echo \"Error: no test specified\" && exit 1"
+	"identity_server-run": "cd identity_server && docker-compose up"
   },
   "author": "",
   "license": "ISC"
