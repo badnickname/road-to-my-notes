@@ -3,9 +3,16 @@ using MyNotes.Identity;
 using NLog.Web;
 using Quartz;
 
+#if DEBUG
+const string env = "Development";
+#else
+const string env = "Production";
+#endif
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseNLog();
-builder.Configuration.AddJsonFile("appsettings.Development.json");
+builder.Configuration.AddJsonFile("appsettings.json");
+builder.Configuration.AddJsonFile($"appsettings.{env}.json", true);
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();
 builder.Services.AddDbContext<ApplicationContext>(options =>
