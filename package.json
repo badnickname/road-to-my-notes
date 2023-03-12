@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Сервис менеджмента тренировок",
   "scripts": {
-    "identity_server": "cd identity_server && docker-compose up"
+    "all": "docker-compose up",
+    "identity": "docker-compose --profile identity up"
   },
   "author": "",
   "license": "ISC"

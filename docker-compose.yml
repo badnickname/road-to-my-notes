@@ -1,25 +1,30 @@
 version: '3.4'
 
 services: 
-  identity_db:
+  db:
     image: postgres
+    profiles:
+      - identity
     environment:
       POSTGRES_PASSWORD: 1234
       POSTGRES_USER: postgres
-      POSTGRES_DB: my_notes_identity_local
 
   identity_server:
     image: identity_server
+    profiles:
+      - identity
     links:
-      - identity_db
+      - db
     depends_on:
-      - identity_db
+      - db
     build:
-      dockerfile: ../Dockerfile
-      context: MyNotes.Identity
+      dockerfile: identity_server/Dockerfile
+      context: identity_server/MyNotes.Identity
   
   proxy:
     image: nginx:alpine
+    profiles:
+      - identity
     links:
       - identity_server
     volumes:
