@@ -51,7 +51,8 @@ builder.Services.AddOpenIddict()
         options.AddDevelopmentEncryptionCertificate()
             .AddDevelopmentSigningCertificate();
         options.UseAspNetCore()
-            .EnableTokenEndpointPassthrough();
+            .EnableTokenEndpointPassthrough()
+            .DisableTransportSecurityRequirement();
     })
     .AddValidation(options =>
     {

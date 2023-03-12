@@ -19,7 +19,7 @@ services:
     depends_on:
       - db
     build:
-      dockerfile: identity_server/Dockerfile
+      dockerfile: ../Dockerfile
       context: identity_server/MyNotes.Identity
   
   proxy:

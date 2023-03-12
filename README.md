@@ -4,11 +4,7 @@
 ## Сервисы
 
 ```shell
-# запуск всех сервисов
-docker-compose up
-```
-```shell
-# запуск отдельного сервиса
+# запуск
 docker-compose --profile identity up
 ```
 
