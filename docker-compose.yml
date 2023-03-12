@@ -5,6 +5,7 @@ services:
     image: postgres
     profiles:
       - identity
+      - db
     environment:
       POSTGRES_PASSWORD: 1234
       POSTGRES_USER: postgres
