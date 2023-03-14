@@ -16,7 +16,7 @@ public sealed class ClientController : Controller
 
     [HttpPost]
     [Authorize(AuthenticationSchemes = "Basic")]
-    [Route("~/connection/client")]
+    [Route("~/client")]
     public async Task<IActionResult> RegisterClient(string clientId, string displayName, string redirectUrl)
     {
         if (await _applicationManager.FindByClientIdAsync(clientId) is null)
