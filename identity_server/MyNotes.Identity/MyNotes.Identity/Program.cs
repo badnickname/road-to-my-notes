@@ -17,6 +17,12 @@ builder.Configuration.AddJsonFile($"appsettings.{env}.json", true);
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews();
 builder.Services.AddLogging();
+builder.Services.AddAuthentication()
+    .AddScheme<BasicAuthenticationOptions, BasicAuthenticationHandler>("Basic", options =>
+    {
+        options.Login = builder.Configuration.GetValue<string>("AuthenticationOptions:Login");
+        options.Password = builder.Configuration.GetValue<string>("AuthenticationOptions:Password");
+    });
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationContext>()
     .AddDefaultTokenProviders();
@@ -44,7 +50,7 @@ builder.Services.AddOpenIddict()
         options.SetAuthorizationEndpointUris("connection/authorize")
             .SetTokenEndpointUris("connect/token");
         options.IgnoreScopePermissions();
-        options.AllowClientCredentialsFlow()
+        options.AllowAuthorizationCodeFlow()
             .AllowRefreshTokenFlow();
         options.AddDevelopmentEncryptionCertificate()
             .AddDevelopmentSigningCertificate();
