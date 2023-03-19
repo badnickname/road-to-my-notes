@@ -4,12 +4,12 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using MyNotes.Identity.Models;
+using MyNotes.Identity.Areas.Connection.Models;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace MyNotes.Identity.Controllers;
+namespace MyNotes.Identity.Areas.Connection.Controllers;
 
 public sealed class AuthorizeController : Controller
 {

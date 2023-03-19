@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace MyNotes.Identity.Controllers;
+namespace MyNotes.Identity.Areas.Default.Controllers;
 
 public sealed class ClientController : Controller
 {

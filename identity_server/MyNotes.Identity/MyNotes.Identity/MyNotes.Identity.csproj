@@ -34,7 +34,14 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Areas\Connection\Views"/>
+        <Folder Include="Areas\Default"/>
         <Folder Include="Migrations"/>
+        <Folder Include="Views"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="Areas\Connection\Views\Authorize\Index.cshtml"/>
     </ItemGroup>
 
 </Project>

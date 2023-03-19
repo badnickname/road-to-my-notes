@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MyNotes.Identity.Controllers;
+namespace MyNotes.Identity.Areas.Default.Controllers;
 
 public sealed class UserController : Controller
 {

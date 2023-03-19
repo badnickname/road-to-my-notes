@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 
-namespace MyNotes.Identity.Controllers;
+namespace MyNotes.Identity.Areas.Connection.Controllers;
 
 public sealed class TokenController : Controller
 {

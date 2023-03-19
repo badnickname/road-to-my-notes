@@ -1,4 +1,4 @@
-﻿namespace MyNotes.Identity.Models;
+﻿namespace MyNotes.Identity.Areas.Connection.Models;
 
 public class AuthorizeResult
 {
