@@ -15,17 +15,15 @@ public sealed class AuthorizeController : Controller
 {
     private readonly IOpenIddictApplicationManager _application;
     private readonly IOpenIddictAuthorizationManager _authorization;
-    private readonly EmailService _emailService;
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
 
     public AuthorizeController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager,
-        EmailService emailService, IOpenIddictApplicationManager application,
+        IOpenIddictApplicationManager application,
         IOpenIddictAuthorizationManager authorization)
     {
         _signInManager = signInManager;
         _userManager = userManager;
-        _emailService = emailService;
         _application = application;
         _authorization = authorization;
     }
@@ -91,44 +89,5 @@ public sealed class AuthorizeController : Controller
         });
 
         return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-    }
-
-    /// <summary>
-    ///     Создать новую учетную запись
-    /// </summary>
-    /// <param name="userName">Имя пользователя</param>
-    /// <param name="password">Пароль</param>
-    /// <param name="email">Email</param>
-    [HttpPut]
-    [Route("~/connection/authorize")]
-    public async Task<IActionResult> RegisterUser(string userName, string password, string email)
-    {
-        var identity = new IdentityUser(userName)
-        {
-            Email = email
-        };
-        var result = await _userManager.CreateAsync(identity, password);
-        if (!result.Succeeded) return StatusCode(500, result.Errors);
-
-        var token = await _userManager.GenerateEmailConfirmationTokenAsync(identity);
-        _emailService.Send(email, "Accept", token);
-
-        return Ok();
-    }
-
-    /// <summary>
-    ///     Подтвердить Email для учетной записи
-    /// </summary>
-    /// <param name="userName">Имя пользователя</param>
-    /// <param name="token">Сгенерированный токен</param>
-    [HttpPatch]
-    [Route("~/connection/authorize")]
-    public async Task<IActionResult> ConfirmEmail(string userName, string token)
-    {
-        var identity = await _userManager.FindByNameAsync(userName);
-        if (identity is null) return StatusCode(500);
-
-        var result = await _userManager.ConfirmEmailAsync(identity, token);
-        return result.Succeeded ? Ok() : StatusCode(500);
     }
 }

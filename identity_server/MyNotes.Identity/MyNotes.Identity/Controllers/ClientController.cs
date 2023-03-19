@@ -22,7 +22,7 @@ public sealed class ClientController : Controller
     /// <param name="redirectUrl">Ссылка на приложение</param>
     [HttpPost]
     [Authorize(AuthenticationSchemes = "Basic")]
-    [Route("~/client")]
+    [Route("~/clients")]
     public async Task<IActionResult> RegisterClient(string clientId, string displayName, string redirectUrl)
     {
         if (await _applicationManager.FindByClientIdAsync(clientId) is null)
