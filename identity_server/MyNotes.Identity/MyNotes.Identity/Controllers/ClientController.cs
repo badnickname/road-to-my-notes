@@ -14,13 +14,18 @@ public sealed class ClientController : Controller
         _applicationManager = applicationManager;
     }
 
+    /// <summary>
+    ///     Добавить новое клиентское приложение
+    /// </summary>
+    /// <param name="clientId">Идентификатор приложения</param>
+    /// <param name="displayName">Название</param>
+    /// <param name="redirectUrl">Ссылка на приложение</param>
     [HttpPost]
     [Authorize(AuthenticationSchemes = "Basic")]
     [Route("~/client")]
     public async Task<IActionResult> RegisterClient(string clientId, string displayName, string redirectUrl)
     {
         if (await _applicationManager.FindByClientIdAsync(clientId) is null)
-        {
             await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
             {
                 ClientId = clientId,
@@ -51,9 +56,6 @@ public sealed class ClientController : Controller
                 }
             });
 
-            return Ok();
-        }
-
-        return StatusCode(500);
+        return Ok();
     }
 }

@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseNLog();
 builder.Configuration.AddJsonFile("appsettings.json");
 builder.Configuration.AddJsonFile($"appsettings.{env}.json", true);
+builder.Services.AddTransient<EmailService>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews();
 builder.Services.AddLogging();

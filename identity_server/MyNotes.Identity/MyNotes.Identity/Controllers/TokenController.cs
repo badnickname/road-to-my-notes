@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -26,8 +27,12 @@ public sealed class TokenController : Controller
         _authorizationManager = authorizationManager;
     }
 
+    /// <summary>
+    ///     Authorization code flow
+    /// </summary>
     [HttpPost]
     [HttpGet]
+    [Authorize(AuthenticationSchemes = OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)]
     [Route("~/connection/token")]
     public async Task<IActionResult> ExchangeAuthorizationToken()
     {
@@ -35,10 +40,7 @@ public sealed class TokenController : Controller
 
         if (request.IsAuthorizationCodeGrantType())
         {
-            // Retrieve the claims principal stored in the authorization code/refresh token
-            var result = await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-
-            var user = await _userManager.FindByIdAsync(result.Principal.GetClaim(OpenIddictConstants.Claims.Subject));
+            var user = await _userManager.FindByIdAsync(HttpContext.User.GetClaim(OpenIddictConstants.Claims.Subject));
             if (user is null)
                 return new ForbidResult(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
                     new AuthenticationProperties(new Dictionary<string, string?>
@@ -49,7 +51,7 @@ public sealed class TokenController : Controller
                             "The token is no longer valid."
                     }));
 
-            var identity = new ClaimsIdentity(result.Principal.Claims,
+            var identity = new ClaimsIdentity(HttpContext.User.Claims,
                 TokenValidationParameters.DefaultAuthenticationType, OpenIddictConstants.Claims.Name,
                 OpenIddictConstants.Claims.Role);
 
