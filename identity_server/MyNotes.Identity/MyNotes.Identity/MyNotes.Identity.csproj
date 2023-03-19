@@ -37,7 +37,6 @@
         <Folder Include="Areas\Connection\Views"/>
         <Folder Include="Areas\Default"/>
         <Folder Include="Migrations"/>
-        <Folder Include="Views"/>
     </ItemGroup>
 
     <ItemGroup>

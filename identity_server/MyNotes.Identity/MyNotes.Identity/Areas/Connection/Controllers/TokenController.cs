@@ -13,18 +13,11 @@ namespace MyNotes.Identity.Areas.Connection.Controllers;
 
 public sealed class TokenController : Controller
 {
-    private readonly IOpenIddictApplicationManager _applicationManager;
-    private readonly IOpenIddictAuthorizationManager _authorizationManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
 
-    public TokenController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,
-        IOpenIddictApplicationManager applicationManager, IOpenIddictAuthorizationManager authorizationManager)
+    public TokenController(UserManager<IdentityUser> userManager)
     {
         _userManager = userManager;
-        _signInManager = signInManager;
-        _applicationManager = applicationManager;
-        _authorizationManager = authorizationManager;
     }
 
     /// <summary>
