@@ -1,7 +1,10 @@
+using System.Net;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyNotes.Identity;
 using NLog.Web;
+using Polly;
+using Polly.Extensions.Http;
 using Quartz;
 
 #if DEBUG
@@ -15,11 +18,18 @@ builder.Host.UseNLog();
 builder.Configuration.AddJsonFile("appsettings.json");
 builder.Configuration.AddJsonFile($"appsettings.{env}.json", true);
 builder.Services.AddTransient<EmailService>();
+builder.Services.AddHttpClient(Constants.EmailServiceApi)
+    .ConfigureHttpClient(client =>
+        client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("EmailService:Url")))
+    .AddPolicyHandler(HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .OrResult(msg => msg.StatusCode != HttpStatusCode.OK)
+        .WaitAndRetryAsync(5, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt))));
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews();
 builder.Services.AddLogging();
 builder.Services.AddAuthentication()
-    .AddScheme<BasicAuthenticationOptions, BasicAuthenticationHandler>("Basic", options =>
+    .AddScheme<BasicAuthenticationOptions, BasicAuthenticationHandler>(Constants.AuthenticationScheme, options =>
     {
         options.Login = builder.Configuration.GetValue<string>("AuthenticationOptions:Login");
         options.Password = builder.Configuration.GetValue<string>("AuthenticationOptions:Password");

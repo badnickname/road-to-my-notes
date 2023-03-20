@@ -33,4 +33,4 @@ services:
       - ./.nginx/cert.key:/etc/nginx/cert.key
       - ./.nginx/cert.crt:/etc/nginx/cert.crt
     ports:
-      - 5010:5010
+      - 443:443

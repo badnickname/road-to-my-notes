@@ -21,7 +21,7 @@ public sealed class ClientController : Controller
     /// <param name="displayName">Название</param>
     /// <param name="redirectUrl">Ссылка на приложение</param>
     [HttpPost]
-    [Authorize(AuthenticationSchemes = "Basic")]
+    [Authorize(AuthenticationSchemes = Constants.AuthenticationScheme)]
     [Route("~/clients")]
     public async Task<IActionResult> RegisterClient(string clientId, string displayName, string redirectUrl)
     {
