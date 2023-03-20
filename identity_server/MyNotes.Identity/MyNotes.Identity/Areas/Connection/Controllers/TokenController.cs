@@ -26,7 +26,7 @@ public sealed class TokenController : Controller
     [HttpPost]
     [HttpGet]
     [Authorize(AuthenticationSchemes = OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)]
-    [Route("~/connection/token")]
+    [Route("~/connect/token")]
     public async Task<IActionResult> ExchangeAuthorizationToken()
     {
         var request = HttpContext.GetOpenIddictServerRequest()!;

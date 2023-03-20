@@ -32,7 +32,7 @@ public sealed class AuthorizeController : Controller
     ///     Форма аутентификации
     /// </summary>
     [HttpGet]
-    [Route("~/connection/authorize")]
+    [Route("~/connect/authorize")]
     public IActionResult GetAuthorizeForm()
     {
         return View("Index");
@@ -44,7 +44,7 @@ public sealed class AuthorizeController : Controller
     /// <param name="userName">Имя</param>
     /// <param name="password">Пароль</param>
     [HttpPost]
-    [Route("~/connection/authorize")]
+    [Route("~/connect/authorize")]
     public async Task<IActionResult> AuthorizeUser(string userName, string password)
     {
         var user = await _userManager.FindByNameAsync(userName);
