@@ -58,8 +58,8 @@ builder.Services.AddOpenIddict()
     })
     .AddServer(options =>
     {
-        options.SetAuthorizationEndpointUris("connection/authorize")
-            .SetTokenEndpointUris("connection/token");
+        options.SetAuthorizationEndpointUris("connect/authorize")
+            .SetTokenEndpointUris("connect/token");
         options.IgnoreScopePermissions();
         options.AllowAuthorizationCodeFlow()
             .AllowRefreshTokenFlow();
