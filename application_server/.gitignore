@@ -3,8 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-MyNotes.Application/MyNotes.Application/appsettings.*.json
-MyNotes.Application/.idea
+src/appsettings.*.json
+src/.idea
 
 # User-specific files
 *.rsuser
