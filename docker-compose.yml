@@ -19,8 +19,8 @@ services:
     depends_on:
       - db
     build:
-      dockerfile: ../Dockerfile
-      context: identity_server/MyNotes.Identity
+      dockerfile: Dockerfile
+      context: identity_server
   
   proxy:
     image: nginx:alpine

@@ -17,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseNLog();
 builder.Configuration.AddJsonFile("appsettings.json");
 builder.Configuration.AddJsonFile($"appsettings.{env}.json", true);
+builder.Services.AddHealthChecks();
 builder.Services.AddTransient<EmailService>();
 builder.Services.AddHttpClient(Constants.EmailServiceApi)
     .ConfigureHttpClient(client =>
@@ -83,5 +84,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseEndpoints(options => options.MapControllers());
+app.MapHealthChecks("/healthz");
 
 app.Run();

@@ -4,7 +4,7 @@ EXPOSE 5010
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["MyNotes.Identity/MyNotes.Identity.csproj", "MyNotes.Identity/"]
+COPY ["src/MyNotes.Identity.csproj", "MyNotes.Identity/"]
 RUN dotnet restore "MyNotes.Identity/MyNotes.Identity.csproj"
 COPY . .
 WORKDIR "/src/MyNotes.Identity"
