@@ -34,8 +34,8 @@ services:
     links:
       - identity_server
     volumes:
-      - ./.nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./.nginx/cert.key:/etc/nginx/cert.key
-      - ./.nginx/cert.crt:/etc/nginx/cert.crt
+      - ./proxy_server/nginx.conf:/etc/nginx/nginx.conf
+      - ./proxy_server/cert.key:/etc/nginx/cert.key
+      - ./proxy_server/cert.crt:/etc/nginx/cert.crt
     ports:
       - 443:443
