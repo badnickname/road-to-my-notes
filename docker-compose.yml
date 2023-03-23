@@ -21,6 +21,11 @@ services:
     build:
       dockerfile: Dockerfile
       context: identity_server
+    healthcheck:
+      test: curl -sS http://localhost/healthz || echo 1
+      interval: 5s
+      timeout: 10s
+      retries: 3
   
   proxy:
     image: nginx:alpine
