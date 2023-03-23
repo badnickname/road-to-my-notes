@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyNotes.Share;
 using OpenIddict.Abstractions;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
@@ -17,27 +18,25 @@ public sealed class ClientController : Controller
     /// <summary>
     ///     Добавить новое клиентское приложение
     /// </summary>
-    /// <param name="clientId">Идентификатор приложения</param>
-    /// <param name="displayName">Название</param>
-    /// <param name="redirectUrl">Ссылка на приложение</param>
     [HttpPost]
     [Authorize(AuthenticationSchemes = Constants.AuthenticationScheme)]
     [Route("~/clients")]
-    public async Task<IActionResult> RegisterClient(string clientId, string displayName, string redirectUrl)
+    public async Task<IActionResult> RegisterClient(ClientOptions dto)
     {
-        if (await _applicationManager.FindByClientIdAsync(clientId) is null)
+        if (await _applicationManager.FindByClientIdAsync(dto.ClientId) is null)
             await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
             {
-                ClientId = clientId,
+                ClientId = dto.ClientId,
+                DisplayName = dto.DisplayName,
                 ConsentType = ConsentTypes.Explicit,
                 Type = ClientTypes.Public,
                 PostLogoutRedirectUris =
                 {
-                    new Uri(redirectUrl)
+                    new Uri(dto.RedirectUrl)
                 },
                 RedirectUris =
                 {
-                    new Uri(redirectUrl)
+                    new Uri(dto.RedirectUrl)
                 },
                 Permissions =
                 {

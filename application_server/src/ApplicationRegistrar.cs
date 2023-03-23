@@ -1,12 +1,26 @@
-﻿namespace MyNotes.Application;
+﻿using System.Text.Json;
+using MyNotes.Share;
+
+namespace MyNotes.Application;
 
 /// <summary>
-/// Регистрирует приложение в identity_server
+///     Регистрирует приложение в identity_server
 /// </summary>
 public class ApplicationRegistrar : BackgroundService
 {
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    private readonly IHttpClientFactory _factory;
+    private readonly ClientOptions _options;
+
+    public ApplicationRegistrar(IHttpClientFactory factory, ClientOptions options)
     {
-        throw new NotImplementedException();
+        _factory = factory;
+        _options = options;
+    }
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        var client = _factory.CreateClient(Constants.IdentityServiceApi);
+        var content = new StringContent(JsonSerializer.Serialize(_options));
+        await client.PostAsync(new Uri("clients"), content, stoppingToken);
     }
 }

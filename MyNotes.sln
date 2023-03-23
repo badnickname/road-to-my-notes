@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNotes.Application", "appl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNotes.Identity", "identity_server\src\MyNotes.Identity.csproj", "{9326312A-C831-4274-B189-331972EDB498}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNotes.Share", "share_csharp\src\MyNotes.Share.csproj", "{0EB88EE0-37D1-401B-A5F9-6F3BD2EF69C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{9326312A-C831-4274-B189-331972EDB498}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9326312A-C831-4274-B189-331972EDB498}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9326312A-C831-4274-B189-331972EDB498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EB88EE0-37D1-401B-A5F9-6F3BD2EF69C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EB88EE0-37D1-401B-A5F9-6F3BD2EF69C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EB88EE0-37D1-401B-A5F9-6F3BD2EF69C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EB88EE0-37D1-401B-A5F9-6F3BD2EF69C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
