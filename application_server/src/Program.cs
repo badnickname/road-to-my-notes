@@ -1,3 +1,5 @@
+using System.Net.Http.Headers;
+using System.Text;
 using MyNotes.Application;
 using MyNotes.Share;
 using OpenIddict.Client;
@@ -19,6 +21,8 @@ builder.Services.AddHttpClient(Constants.IdentityServiceApi)
     {
         var config = builder.Configuration.GetSection("IdentityService").Get<IdentityServiceOptions>();
         client.BaseAddress = new Uri(config.Url);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
+            Convert.ToBase64String(Encoding.UTF8.GetBytes($"{config.Login}:{config.Password}")));
     })
     .AddPolicyHandler(HttpPolicyExtensions
         .HandleTransientHttpError()

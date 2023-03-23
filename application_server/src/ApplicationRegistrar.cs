@@ -20,7 +20,6 @@ public class ApplicationRegistrar : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var client = _factory.CreateClient(Constants.IdentityServiceApi);
-        var content = new StringContent(JsonSerializer.Serialize(_options));
-        await client.PostAsync(new Uri("clients"), content, stoppingToken);
+        await client.PostAsJsonAsync(new Uri("clients"), _options, stoppingToken);
     }
 }
