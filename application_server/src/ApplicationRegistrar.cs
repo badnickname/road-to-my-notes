@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using MyNotes.Share;
+﻿using MyNotes.Share;
 
 namespace MyNotes.Application;
 
