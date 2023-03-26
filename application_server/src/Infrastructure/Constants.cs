@@ -1,4 +1,4 @@
-﻿namespace MyNotes.Application;
+﻿namespace MyNotes.Application.Infrastructure;
 
 public static class Constants
 {

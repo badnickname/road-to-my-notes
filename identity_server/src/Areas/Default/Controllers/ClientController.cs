@@ -21,12 +21,13 @@ public sealed class ClientController : Controller
     [HttpPost]
     [Authorize(AuthenticationSchemes = Constants.AuthenticationScheme)]
     [Route("~/clients")]
-    public async Task<IActionResult> RegisterClient(ClientOptions dto)
+    public async Task<IActionResult> RegisterClient([FromBody] ClientOptions dto)
     {
         if (await _applicationManager.FindByClientIdAsync(dto.ClientId) is null)
             await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
             {
                 ClientId = dto.ClientId,
+                ClientSecret = dto.ClientSecret,
                 DisplayName = dto.DisplayName,
                 ConsentType = ConsentTypes.Explicit,
                 Type = ClientTypes.Public,

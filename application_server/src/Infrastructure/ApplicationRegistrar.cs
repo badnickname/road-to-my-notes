@@ -1,6 +1,7 @@
-﻿using MyNotes.Share;
+﻿using Microsoft.Extensions.Options;
+using MyNotes.Share;
 
-namespace MyNotes.Application;
+namespace MyNotes.Application.Infrastructure;
 
 /// <summary>
 ///     Регистрирует приложение в identity_server
@@ -8,9 +9,9 @@ namespace MyNotes.Application;
 public class ApplicationRegistrar : BackgroundService
 {
     private readonly IHttpClientFactory _factory;
-    private readonly ClientOptions _options;
+    private readonly IOptions<ClientOptions> _options;
 
-    public ApplicationRegistrar(IHttpClientFactory factory, ClientOptions options)
+    public ApplicationRegistrar(IHttpClientFactory factory, IOptions<ClientOptions> options)
     {
         _factory = factory;
         _options = options;
@@ -20,6 +21,7 @@ public class ApplicationRegistrar : BackgroundService
     {
         await Task.Delay(5000, stoppingToken);
         var client = _factory.CreateClient(Constants.IdentityServiceApi);
-        await client.PostAsJsonAsync(new Uri("clients"), _options, stoppingToken);
+        var options = _options.Value;
+        await client.PostAsJsonAsync(new Uri("clients", UriKind.Relative), options, stoppingToken);
     }
 }

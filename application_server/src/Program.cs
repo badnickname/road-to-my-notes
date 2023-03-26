@@ -1,8 +1,9 @@
 using System.Net.Http.Headers;
 using System.Text;
-using MyNotes.Application;
+using Microsoft.AspNetCore.Authorization;
+using MyNotes.Application.Infrastructure;
 using MyNotes.Share;
-using OpenIddict.Client;
+using OpenIddict.Validation.AspNetCore;
 using Polly;
 using Polly.Extensions.Http;
 
@@ -29,28 +30,30 @@ builder.Services.AddHttpClient(Constants.IdentityServiceApi)
         .WaitAndRetryAsync(5, attempt => TimeSpan.FromSeconds(Math.Pow(3, attempt))));
 builder.Services
     .AddOpenIddict()
-    .AddClient(options =>
+    .AddValidation(options =>
     {
         var client = builder.Configuration.GetSection("IdentityClient").Get<ClientOptions>()!;
         var server = builder.Configuration.GetSection("IdentityService").Get<IdentityServiceOptions>()!;
 
-        options.AllowAuthorizationCodeFlow()
-            .AllowRefreshTokenFlow();
+        options.SetIssuer(server.Url);
 
-        options.AddDevelopmentEncryptionCertificate()
-            .AddDevelopmentSigningCertificate();
+        options.UseIntrospection()
+            .SetClientId(client.ClientId)
+            .SetClientSecret(client.ClientSecret);
+        
+        options.UseAspNetCore();
 
-        options.AddRegistration(new OpenIddictClientRegistration
-        {
-            Issuer = new Uri(server.Url, UriKind.Absolute),
-            ClientId = client.ClientId,
-            RedirectUri = new Uri(client.RedirectUrl, UriKind.Absolute)
-        });
+        options.UseSystemNetHttp();
     });
+builder.Services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+builder.Services.AddAuthorization();
 builder.Services.AddHostedService<ApplicationRegistrar>();
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapGet("/",  [Authorize] () => "Hello World!");
 
 app.Run();
