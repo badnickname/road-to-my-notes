@@ -15,12 +15,24 @@ public sealed class UserController : Controller
     }
 
     /// <summary>
+    ///     Запросить форму регистрации
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("~/users")]
+    [Area("Default")]
+    public IActionResult GetRegistrationForm()
+    {
+        return View("Index");
+    }
+
+    /// <summary>
     ///     Создать новую учетную запись
     /// </summary>
     /// <param name="userName">Имя пользователя</param>
     /// <param name="password">Пароль</param>
     /// <param name="email">Email</param>
-    [HttpPut]
+    [HttpPost]
     [Route("~/users")]
     public async Task<IActionResult> RegisterUser(string userName, string password, string email)
     {
@@ -43,7 +55,7 @@ public sealed class UserController : Controller
     /// <param name="userName">Имя пользователя</param>
     /// <param name="token">Сгенерированный токен</param>
     [HttpPost]
-    [Route("~/users")]
+    [Route("~/users/email")]
     public async Task<IActionResult> ConfirmEmail(string userName, string token)
     {
         var identity = await _userManager.FindByNameAsync(userName);

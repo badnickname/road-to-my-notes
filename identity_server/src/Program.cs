@@ -76,11 +76,21 @@ builder.Services.AddOpenIddict()
         options.UseLocalServer();
         options.UseAspNetCore();
     });
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.SetIsOriginAllowed(origin => true);
+        policy.AllowCredentials();
+        policy.AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseRouting();
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseEndpoints(options => options.MapControllers());

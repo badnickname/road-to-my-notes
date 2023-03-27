@@ -27,7 +27,6 @@ public sealed class ClientController : Controller
             await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
             {
                 ClientId = dto.ClientId,
-                ClientSecret = dto.ClientSecret,
                 DisplayName = dto.DisplayName,
                 ConsentType = ConsentTypes.Explicit,
                 Type = ClientTypes.Public,

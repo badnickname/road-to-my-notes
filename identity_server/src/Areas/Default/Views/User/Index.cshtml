@@ -1,0 +1,23 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Регистрация</title>
+</head>
+<body>
+<div>
+    <form asp-controller="User" asp-action="RegisterUser" method="post">
+        <input name="userName" type="text"/>
+        <input name="password" type="password"/>
+        <input name="email" type="text"/>
+        <input type="submit" value="Login"/>
+    </form>
+</div>
+</body>
+</html>

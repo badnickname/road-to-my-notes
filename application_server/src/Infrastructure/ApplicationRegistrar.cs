@@ -9,9 +9,9 @@ namespace MyNotes.Application.Infrastructure;
 public class ApplicationRegistrar : BackgroundService
 {
     private readonly IHttpClientFactory _factory;
-    private readonly IOptions<ClientOptions> _options;
+    private readonly IOptions<IdentityOptions> _options;
 
-    public ApplicationRegistrar(IHttpClientFactory factory, IOptions<ClientOptions> options)
+    public ApplicationRegistrar(IHttpClientFactory factory, IOptions<IdentityOptions> options)
     {
         _factory = factory;
         _options = options;
@@ -21,7 +21,9 @@ public class ApplicationRegistrar : BackgroundService
     {
         await Task.Delay(5000, stoppingToken);
         var client = _factory.CreateClient(Constants.IdentityServiceApi);
-        var options = _options.Value;
-        await client.PostAsJsonAsync(new Uri("clients", UriKind.Relative), options, stoppingToken);
+        var clientOptions = _options.Value.ApplicationClient;
+        var serverOptions = _options.Value.ApplicationServer;
+        await client.PostAsJsonAsync(new Uri("clients", UriKind.Relative), clientOptions, stoppingToken);
+        await client.PostAsJsonAsync(new Uri("clients", UriKind.Relative), serverOptions, stoppingToken);
     }
 }

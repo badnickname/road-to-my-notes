@@ -9,7 +9,7 @@ export class AuthService {
   private readonly userManager = new UserManager({
     authority: environment.identityServer.url,
     client_id: environment.identityClient.clientId,
-    redirect_uri: `${environment.identityClient.redirectUrl}signin-callback`,
+    redirect_uri: `${environment.identityClient.redirectUrl}/login-callback`,
     post_logout_redirect_uri: environment.identityClient.redirectUrl,
     response_type: 'code',
   })
@@ -22,6 +22,10 @@ export class AuthService {
 
   public signInRedirect(): Promise<void> {
     return this.userManager.signinRedirect();
+  }
+
+  public async signInCallback(): Promise<void> {
+    await this.userManager.signinCallback();
   }
 
   public async renewToken(): Promise<User> {

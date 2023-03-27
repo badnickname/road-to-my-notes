@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Security.Claims;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -33,9 +34,13 @@ public sealed class AuthorizeController : Controller
     /// </summary>
     [HttpGet]
     [Route("~/connect/authorize")]
+    [Area("Connection")]
     public IActionResult GetAuthorizeForm()
     {
-        return View("Index");
+        return View("Index", new AuthorizeResult
+        {
+            HasError = false
+        });
     }
 
     /// <summary>
@@ -45,15 +50,19 @@ public sealed class AuthorizeController : Controller
     /// <param name="password">Пароль</param>
     [HttpPost]
     [Route("~/connect/authorize")]
-    public async Task<IActionResult> AuthorizeUser(string userName, string password)
+    [Area("Connection")]
+    public async Task<IActionResult> AuthorizeUser()
     {
+        var userName = HttpContext.Request.Form["userName"];
+        var password = HttpContext.Request.Form["password"];
+        
         var user = await _userManager.FindByNameAsync(userName);
 
         if (user is null || !user.EmailConfirmed) return View("Index", new AuthorizeResult { HasError = true });
 
         var request = HttpContext.GetOpenIddictServerRequest()!;
 
-        var application = await _application.FindByIdAsync(request.ClientId);
+        var application = await _application.FindByClientIdAsync(request.ClientId);
 
         var clientId = await _application.GetIdAsync(application);
 

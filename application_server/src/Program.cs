@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using MyNotes.Application;
 using MyNotes.Application.Infrastructure;
 using MyNotes.Share;
 using OpenIddict.Validation.AspNetCore;
@@ -16,7 +17,7 @@ const string env = "Production";
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json");
 builder.Configuration.AddJsonFile($"appsettings.{env}.json", true);
-builder.Services.Configure<ClientOptions>(builder.Configuration.GetSection("IdentityClient"));
+builder.Services.Configure<IdentityOptions>(builder.Configuration.GetSection("IdentityClient"));
 builder.Services.AddHttpClient(Constants.IdentityServiceApi)
     .ConfigureHttpClient(client =>
     {
@@ -32,14 +33,14 @@ builder.Services
     .AddOpenIddict()
     .AddValidation(options =>
     {
-        var client = builder.Configuration.GetSection("IdentityClient").Get<ClientOptions>()!;
+        var client = builder.Configuration.GetSection("IdentityClient").Get<IdentityOptions>()!;
         var server = builder.Configuration.GetSection("IdentityService").Get<IdentityServiceOptions>()!;
 
         options.SetIssuer(server.Url);
 
         options.UseIntrospection()
-            .SetClientId(client.ClientId)
-            .SetClientSecret(client.ClientSecret);
+            .SetClientId(client.ApplicationServer.ClientId)
+            .SetClientSecret(client.ApplicationServer.ClientSecret);
         
         options.UseAspNetCore();
 
