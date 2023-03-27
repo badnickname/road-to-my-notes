@@ -1,0 +1,1 @@
+curl -X POST http://localhost:5001/clients -u "admin:1234" -H "Content-Type: application/json" -d '{"Type":0,"ClientId":"my-notes-application-client","DisplayName":"Application Client","RedirectUrl":"http://localhost:4200/login-callback","Scopes":["application-api"]}'

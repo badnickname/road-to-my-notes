@@ -17,7 +17,7 @@ const string env = "Production";
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json");
 builder.Configuration.AddJsonFile($"appsettings.{env}.json", true);
-builder.Services.Configure<IdentityOptions>(builder.Configuration.GetSection("IdentityClient"));
+builder.Services.Configure<ClientOptions>(builder.Configuration.GetSection("IdentityClient"));
 builder.Services.AddHttpClient(Constants.IdentityServiceApi)
     .ConfigureHttpClient(client =>
     {
@@ -33,14 +33,15 @@ builder.Services
     .AddOpenIddict()
     .AddValidation(options =>
     {
-        var client = builder.Configuration.GetSection("IdentityClient").Get<IdentityOptions>()!;
+        var client = builder.Configuration.GetSection("IdentityClient").Get<ClientOptions>()!;
         var server = builder.Configuration.GetSection("IdentityService").Get<IdentityServiceOptions>()!;
 
         options.SetIssuer(server.Url);
+        options.AddAudiences(client.ClientId);
 
         options.UseIntrospection()
-            .SetClientId(client.ApplicationServer.ClientId)
-            .SetClientSecret(client.ApplicationServer.ClientSecret);
+            .SetClientId(client.ClientId)
+            .SetClientSecret(client.ClientSecret);
         
         options.UseAspNetCore();
 

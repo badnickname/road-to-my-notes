@@ -1,0 +1,1 @@
+curl -X POST http://identity_server:5001/clients -u "admin:1234" -H "Content-Type: application/json" -d '{"Type": 0, "ClientId": "my-notes-application-client", "DisplayName": "Application Client", "RedirectUrl": "https://application_client/login-callback", "Scopes": ["application-api"]}'
