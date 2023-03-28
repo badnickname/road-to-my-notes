@@ -7,6 +7,7 @@ export const environment = {
     url: 'https://identity_server'
   },
   applicationServer: {
-    url: 'https://application_server'
+    url: 'https://application_server',
+    scope: 'application-api'
   }
 }

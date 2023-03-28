@@ -12,6 +12,7 @@ export class AuthService {
     redirect_uri: `${environment.identityClient.redirectUrl}/login-callback`,
     post_logout_redirect_uri: environment.identityClient.redirectUrl,
     response_type: 'code',
+    scope: environment.applicationServer.scope
   })
 
   public async getUser(): Promise<User> {

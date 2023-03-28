@@ -17,6 +17,7 @@ const string env = "Production";
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json");
 builder.Configuration.AddJsonFile($"appsettings.{env}.json", true);
+builder.Services.AddControllers();
 builder.Services.Configure<ClientOptions>(builder.Configuration.GetSection("IdentityClient"));
 builder.Services.AddHttpClient(Constants.IdentityServiceApi)
     .ConfigureHttpClient(client =>
@@ -50,12 +51,21 @@ builder.Services
 builder.Services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 builder.Services.AddAuthorization();
 builder.Services.AddHostedService<ApplicationRegistrar>();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.SetIsOriginAllowed(origin => true);
+        policy.AllowCredentials();
+        policy.AllowAnyHeader();
+        policy.AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
-
+app.UseRouting();
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapGet("/",  [Authorize] () => "Hello World!");
-
+app.UseEndpoints(options => options.MapControllers());
 app.Run();

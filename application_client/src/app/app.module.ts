@@ -4,6 +4,7 @@ import { AppComponent } from './components/app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './components/home.component';
 import { LoginCallbackComponent } from './components/login-callback.component';
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { LoginCallbackComponent } from './components/login-callback.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

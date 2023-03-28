@@ -1,7 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Security.Claims;
 using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -18,15 +17,17 @@ public sealed class AuthorizeController : Controller
     private readonly IOpenIddictAuthorizationManager _authorization;
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly IOpenIddictScopeManager _scopeManager;
 
     public AuthorizeController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager,
         IOpenIddictApplicationManager application,
-        IOpenIddictAuthorizationManager authorization)
+        IOpenIddictAuthorizationManager authorization, IOpenIddictScopeManager scopeManager)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _application = application;
         _authorization = authorization;
+        _scopeManager = scopeManager;
     }
 
     /// <summary>
@@ -82,12 +83,20 @@ public sealed class AuthorizeController : Controller
             .SetClaim(Claims.Subject, user.Id)
             .SetClaim(Claims.Email, user.Email)
             .SetClaim(Claims.Name, user.UserName)
-            .SetClaims(Claims.Role, roles);
+            .SetClaims(Claims.Role, roles)
+            .SetScopes(request.GetScopes());
 
         authorization ??= await _authorization.CreateAsync(identity, user.Id, clientId, AuthorizationTypes.Permanent,
             identity.GetScopes());
 
         identity.SetAuthorizationId(await _authorization.GetIdAsync(authorization));
+
+        var resources = new List<string>();
+        await foreach (var resource in _scopeManager.ListResourcesAsync(identity.GetScopes()))
+        {
+            resources.Add(resource);
+        }
+        identity.SetResources(resources);
 
         identity.SetDestinations(static claim => claim.Type switch
         {

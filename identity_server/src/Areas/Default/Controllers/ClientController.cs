@@ -92,7 +92,7 @@ public sealed class ClientController : Controller
                 if (createdScope is not null)
                     await _scopeManager.UpdateAsync(scope, descriptor);
                 else
-                    await _applicationManager.CreateAsync(descriptor);
+                    await _scopeManager.CreateAsync(descriptor);
             }
         }
 
